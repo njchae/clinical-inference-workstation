@@ -1,0 +1,47 @@
+[
+  {
+    "case_id": "case_accept",
+    "weak_label": {
+      "confidence": 0.93,
+      "review_required": false,
+      "signals": {"redness_present": true, "texture_present": true, "lesion_visible": true}
+    },
+    "adjudicated": {
+      "final_decision": "accept",
+      "decision_confidence": 0.9,
+      "review_required": false,
+      "review_reason": "sufficient_structured_evidence"
+    },
+    "delta": "none — all four stages confirmed strong evidence; weak label accepted without modification"
+  },
+  {
+    "case_id": "case_escalate",
+    "weak_label": {
+      "confidence": 0.61,
+      "review_required": true,
+      "signals": {"redness_present": true, "texture_present": false, "lesion_visible": false}
+    },
+    "adjudicated": {
+      "final_decision": "needs_human_review",
+      "decision_confidence": 0.63,
+      "review_required": true,
+      "review_reason": "weak_or_conflicting_evidence"
+    },
+    "delta": "escalated — label_reviewer flagged mixed evidence; safety_checker confirmed; review_router routed to human review queue"
+  },
+  {
+    "case_id": "case_reject",
+    "weak_label": {
+      "confidence": 0.21,
+      "review_required": true,
+      "signals": {"redness_present": false, "texture_present": false, "lesion_visible": false}
+    },
+    "adjudicated": {
+      "final_decision": "reject_for_insufficient_evidence",
+      "decision_confidence": 0.95,
+      "review_required": false,
+      "review_reason": "insufficient_evidence_to_adjudicate"
+    },
+    "delta": "rejected — safety_checker flagged poor image quality and sub-threshold confidence; routing to human review cannot resolve the underlying data problem, so the case is rejected from the labeling batch rather than queued"
+  }
+]

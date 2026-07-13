@@ -1,0 +1,12 @@
+signals:
+  redness_alert: 0.28
+  texture_alert: 0.24
+model:
+  review_threshold: 0.45
+  urgent_threshold: 0.72
+logic:
+  urgent_if:
+    - severe_redness_and_model
+  review_if:
+    - redness_or_texture_or_model
+

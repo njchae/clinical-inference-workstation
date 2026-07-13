@@ -1,0 +1,21 @@
+dataset:
+  size: 120
+  image_size: 96
+generation:
+  redness_min: 0.12
+  redness_max: 0.92
+  texture_min: 0.01
+  texture_max: 0.24
+  extent_min: 0.18
+  extent_max: 0.52
+sample_cases:
+  - seed: 4
+    label: Moderate erythema
+    description: Signals near the review boundary.
+  - seed: 43
+    label: Low-risk baseline
+    description: Routine-monitor synthetic case.
+  - seed: 46
+    label: Concerning pattern
+    description: Redness plus learned pattern evidence.
+

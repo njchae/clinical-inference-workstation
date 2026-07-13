@@ -1,0 +1,33 @@
+name: Azure Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Container image tag"
+        required: true
+        type: string
+  push:
+    tags: ["v*"]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Build image
+        run: docker build -t clinical-inference-workstation:${{ inputs.image_tag || github.ref_name }} .
+      - name: Placeholder deploy command
+        run: |
+          echo "Deploy clinical-inference-workstation:${{ inputs.image_tag || github.ref_name }}"
+          echo "Update this step with your Azure Container Apps or Web App command."

@@ -1,0 +1,18 @@
+splits:
+  train_ratio: 0.6
+  validation_ratio: 0.2
+  test_ratio: 0.2
+thresholding:
+  target_sensitivity: 0.7
+  threshold_min: 0.05
+  threshold_max: 0.95
+  threshold_step: 0.01
+calibration:
+  temperature_min: 0.5
+  temperature_max: 3.0
+  temperature_step: 0.1
+model:
+  input_size: 12
+  max_iter: 400
+  random_state: 0
+

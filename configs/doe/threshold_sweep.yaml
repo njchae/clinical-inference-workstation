@@ -1,0 +1,13 @@
+# DOE parameter sweep over the calibration temperature and review threshold.
+# This formalizes the pipeline's per-pathway step (temperature scaling +
+# sensitivity-constrained threshold selection) into a full grid so configurations
+# can be compared systematically. The sweep runs on the validation split by
+# default; the held-out test set stays locked.
+design: full_factorial   # full_factorial | fractional_factorial
+fraction: 2              # used only when design is fractional_factorial
+factors:
+  temperature: [0.8, 1.0, 1.2, 1.5, 2.0]
+  threshold: [0.30, 0.40, 0.45, 0.50, 0.60]
+objective:
+  target_sensitivity: 0.70
+  maximize: specificity

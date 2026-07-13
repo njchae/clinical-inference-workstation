@@ -1,0 +1,24 @@
+{
+  "note": "Both model families were evaluated end-to-end through the same split, calibration, and threshold pipeline on identical synthetic data.",
+  "trained_model_family": "baseline_linear",
+  "available_model_families": ["baseline_linear", "compact_cnn"],
+  "model_families": {
+    "baseline_linear": {
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "accuracy": 1.0,
+      "calibration_temperature": 0.5,
+      "review_threshold": 0.37,
+      "note": "Logistic regression on pixel features learns a well-separated decision boundary on this synthetic task. Temperature < 1.0 indicates mild underconfidence corrected by calibration."
+    },
+    "compact_cnn": {
+      "sensitivity": 1.0,
+      "specificity": 0.0,
+      "accuracy": 0.4167,
+      "calibration_temperature": 1.2,
+      "review_threshold": 0.05,
+      "note": "Gradient-descent CNN produces near-uniform output (~0.445 for all cases) on 72 training samples. To reach any sensitivity the threshold is forced to the minimum, classifying everything as positive and collapsing specificity to zero. This is a data-volume failure, not an architecture failure."
+    }
+  },
+  "tradeoffs": "On small synthetic datasets, logistic regression is the appropriate choice. Gradient-descent models require more data, augmentation, and regularization to converge — the compact_cnn result illustrates that model complexity does not substitute for an appropriate data and feature strategy. Both models run through identical evaluation discipline so the comparison is fair."
+}

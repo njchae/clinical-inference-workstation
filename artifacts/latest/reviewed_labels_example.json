@@ -1,0 +1,14 @@
+[
+  {
+    "case_id": "case-0007",
+    "redness_present": true,
+    "texture_present": true,
+    "lesion_visible": true
+  },
+  {
+    "case_id": "case-0019",
+    "redness_present": true,
+    "texture_present": true,
+    "lesion_visible": true
+  }
+]

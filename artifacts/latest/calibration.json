@@ -1,0 +1,7 @@
+{
+  "model_family": "baseline_linear",
+  "temperature": 0.5,
+  "calibration_note": "Temperature < 1.0 means the model was underconfident — probabilities clustered near 0.5 relative to the true class distribution. Scaling with T=0.5 pushes probabilities toward 0 and 1, sharpening the decision boundary before threshold selection.",
+  "review_threshold": 0.37,
+  "lesson": "Aggregate ranking metrics do not fully describe probability calibration or threshold behavior. Calibration is a required evaluation step."
+}

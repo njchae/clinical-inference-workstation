@@ -1,0 +1,35 @@
+{
+    "inference_id": 40,
+    "request_id": "7554f972764b4366b03566577703d842",
+    "subject": null,
+    "latency_ms": 1,
+    "signals": {
+        "redness_ratio": 0.56,
+        "texture_score": 0.245,
+        "lesion_extent": 0.7065
+    },
+    "region": {
+        "x0": 17,
+        "y0": 16,
+        "x1": 78,
+        "y1": 79,
+        "coverage": 0.314,
+        "image_width": 96,
+        "image_height": 96
+    },
+    "model": {
+        "raw_probability": 0.9426,
+        "calibrated_probability": 0.9426,
+        "model_name": "tiny_linear_model",
+        "model_version": "artifact_bundle_v1"
+    },
+    "decision": {
+        "bucket": "urgent_review",
+        "reasons": [
+            "redness_alert",
+            "texture_alert",
+            "model_probability"
+        ],
+        "threshold_used": 0.72
+    }
+}

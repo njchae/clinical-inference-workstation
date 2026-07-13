@@ -1,0 +1,4 @@
+streamlit>=1.35.0
+plotly>=5.22.0
+# The DOE heatmap tab reuses the workstation package's grid helpers.
+# Install it from the repo root as well: pip install -e .

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Synthetic Triage Workstation</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="layout">
+      <section class="hero">
+        <p class="eyebrow">Public synthetic demo</p>
+        <h1>Synthetic Triage Workstation</h1>
+        <p class="lede">
+          A clinical-style review surface for synthetic cases that exposes deterministic
+          signals, calibrated model output, and final thresholded recommendations.
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Sample cases</h2>
+          <p>Choose a sample or upload a PNG to inspect the same end-to-end flow.</p>
+        </div>
+        <label class="upload">
+          <span>Upload PNG</span>
+          <input id="upload-input" type="file" accept="image/png,image/jpeg">
+        </label>
+        <div id="sample-grid" class="sample-grid"></div>
+      </section>
+
+      <section class="panel case-view-grid">
+        <div>
+          <h2>Case view</h2>
+          <canvas
+            id="case-canvas"
+            width="480"
+            height="480"
+            aria-label="Selected case with detected signal region overlay"
+          ></canvas>
+          <p id="case-caption" class="case-caption">
+            Select a sample to render the detected signal region.
+          </p>
+        </div>
+        <div>
+          <h2>Signal breakdown</h2>
+          <div id="signal-bars" class="signal-bars"></div>
+        </div>
+      </section>
+
+      <section class="panel decision-grid">
+        <div>
+          <h2>Decision summary</h2>
+          <div id="decision-summary" class="decision-summary">
+            Select a sample to review its signals and recommendation.
+          </div>
+        </div>
+        <div>
+          <h2>Signals</h2>
+          <dl id="signal-list" class="signal-list"></dl>
+        </div>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
