@@ -1,163 +1,100 @@
-const sampleGrid = document.getElementById("sample-grid");
-const decisionSummary = document.getElementById("decision-summary");
-const signalList = document.getElementById("signal-list");
-const uploadInput = document.getElementById("upload-input");
+const caseGrid = document.getElementById("case-grid");
 const caseCanvas = document.getElementById("case-canvas");
 const caseCaption = document.getElementById("case-caption");
-const signalBars = document.getElementById("signal-bars");
+const signalList = document.getElementById("signal-list");
+const reviewNote = document.getElementById("review-note");
+const caseProvenance = document.getElementById("case-provenance");
 
-function renderSignals(sample) {
+function renderSignals(caseData) {
   signalList.innerHTML = "";
-  [
-    ["Redness ratio", sample.redness_ratio.toFixed(2)],
-    ["Texture score", sample.texture_score.toFixed(2)],
-    ["Model probability", sample.model_probability.toFixed(2)],
-    ["Decision bucket", sample.bucket.replace("_", " ")]
-  ].forEach(([term, value]) => {
-    const dt = document.createElement("dt");
-    dt.textContent = term;
-    const dd = document.createElement("dd");
-    dd.textContent = value;
-    signalList.append(dt, dd);
+  caseData.signals.forEach(({ label, state }) => {
+    const row = document.createElement("div");
+    row.className = "signal-row";
+    const term = document.createElement("dt");
+    term.textContent = label;
+    const value = document.createElement("dd");
+    value.textContent = state === "recorded signal" ? "Recorded signal" : "Not recorded";
+    value.className = state === "recorded signal" ? "signal-present" : "signal-absent";
+    row.append(term, value);
+    signalList.appendChild(row);
   });
 }
 
-function renderCaseView(imageUrl, payload, label) {
-  const ctx = caseCanvas.getContext("2d");
-  const img = new Image();
-  img.onload = () => {
-    ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, caseCanvas.width, caseCanvas.height);
-    ctx.drawImage(img, 0, 0, caseCanvas.width, caseCanvas.height);
+function renderCaseView(caseData) {
+  const context = caseCanvas.getContext("2d");
+  const image = new Image();
+  image.onload = () => {
+    const size = Math.min(image.naturalWidth, image.naturalHeight);
+    caseCanvas.width = size;
+    caseCanvas.height = size;
+    context.clearRect(0, 0, size, size);
+    context.drawImage(image, 0, 0, size, size);
 
-    const region = payload.region;
-    const scaleX = caseCanvas.width / region.image_width;
-    const scaleY = caseCanvas.height / region.image_height;
-    const x = region.x0 * scaleX;
-    const y = region.y0 * scaleY;
-    const width = (region.x1 - region.x0) * scaleX;
-    const height = (region.y1 - region.y0) * scaleY;
+    const { x, y, width, height } = caseData.roi;
+    context.strokeStyle = "#9a3d2f";
+    context.lineWidth = Math.max(3, size / 160);
+    context.setLineDash([size / 42, size / 70]);
+    context.strokeRect(x * size, y * size, width * size, height * size);
+    context.setLineDash([]);
 
-    ctx.strokeStyle = "#1d4ed8";
-    ctx.lineWidth = 3;
-    ctx.setLineDash([10, 6]);
-    ctx.strokeRect(x, y, width, height);
-    ctx.setLineDash([]);
-
-    const tag = "signal region";
-    ctx.font = "14px system-ui, sans-serif";
-    const tagWidth = ctx.measureText(tag).width + 12;
-    const tagY = Math.max(y - 24, 2);
-    ctx.fillStyle = "#1d4ed8";
-    ctx.fillRect(x, tagY, tagWidth, 22);
-    ctx.fillStyle = "#ffffff";
-    ctx.fillText(tag, x + 6, tagY + 16);
-
-    caseCaption.textContent =
-      `${label} — detected region covers ${(region.coverage * 100).toFixed(1)}% of the frame ` +
-      `(synthetic case; no clinical imagery).`;
+    const label = "field of view";
+    context.font = `${Math.max(14, size / 32)}px system-ui, sans-serif`;
+    const labelWidth = context.measureText(label).width + 16;
+    const labelY = Math.max(y * size - 28, 4);
+    context.fillStyle = "#9a3d2f";
+    context.fillRect(x * size, labelY, labelWidth, 24);
+    context.fillStyle = "#ffffff";
+    context.fillText(label, x * size + 8, labelY + 17);
   };
-  img.src = imageUrl;
+  image.src = caseData.image_url;
+  caseCaption.textContent =
+    `${caseData.title}: saved field-of-view overlay from the recorded local pipeline run.`;
 }
 
-function appendBar(container, label, value, options = {}) {
-  const row = document.createElement("div");
-  row.className = "bar-row";
-
-  const name = document.createElement("span");
-  name.className = "bar-label";
-  name.textContent = label;
-
-  const track = document.createElement("div");
-  track.className = "bar-track";
-
-  const fill = document.createElement("div");
-  fill.className = `bar-fill${options.emphasis ? " bar-fill-emphasis" : ""}`;
-  fill.style.width = `${Math.min(Math.max(value, 0), 1) * 100}%`;
-  track.appendChild(fill);
-
-  if (typeof options.marker === "number") {
-    const marker = document.createElement("div");
-    marker.className = "bar-marker";
-    marker.style.left = `${Math.min(Math.max(options.marker, 0), 1) * 100}%`;
-    marker.title = `decision threshold ${options.marker.toFixed(2)}`;
-    track.appendChild(marker);
-  }
-
-  const reading = document.createElement("span");
-  reading.className = "bar-value";
-  reading.textContent = value.toFixed(2);
-
-  row.append(name, track, reading);
-  container.appendChild(row);
-}
-
-function renderSignalBars(payload) {
-  signalBars.innerHTML = "";
-  appendBar(signalBars, "Redness ratio", payload.signals.redness_ratio);
-  appendBar(signalBars, "Texture score", payload.signals.texture_score);
-  appendBar(signalBars, "Calibrated probability", payload.model.calibrated_probability, {
-    marker: payload.decision.threshold_used,
-    emphasis: true
+function selectCase(caseData, selector) {
+  document.querySelectorAll(".case-selector").forEach((button) => {
+    button.classList.toggle("is-selected", button === selector);
+    button.setAttribute("aria-pressed", String(button === selector));
   });
-
-  const legend = document.createElement("p");
-  legend.className = "bar-legend";
-  legend.textContent =
-    `Tick marks the decision threshold applied to this case ` +
-    `(${payload.decision.threshold_used.toFixed(2)}) from the calibrated decision config.`;
-  signalBars.appendChild(legend);
+  renderCaseView(caseData);
+  renderSignals(caseData);
+  const disagreement = caseData.detector_disagreement
+    ? "Detector disagreement is present. "
+    : "No detector disagreement is recorded. ";
+  reviewNote.innerHTML = `<strong>Human review required.</strong> ${disagreement}${caseData.review_note} ` +
+    "This is recorded local pipeline output on a public reference image, not a clinical assessment.";
+  caseProvenance.textContent = `Source: ${caseData.source}. License: ${caseData.license}.`;
 }
 
-function selectSample(sample) {
-  decisionSummary.textContent =
-    `${sample.label}: ${sample.bucket.replace("_", " ")} based on combined visual signals and calibrated model output.`;
-  renderSignals(sample);
-}
-
-async function analyzeFile(file, label = file.name) {
-  const formData = new FormData();
-  formData.append("image", file);
-  const response = await fetch("/v1/analyze", { method: "POST", body: formData });
-  const payload = await response.json();
-  selectSample({
-    label,
-    bucket: payload.decision.bucket,
-    redness_ratio: payload.signals.redness_ratio,
-    texture_score: payload.signals.texture_score,
-    model_probability: payload.model.calibrated_probability
-  });
-  renderCaseView(URL.createObjectURL(file), payload, label);
-  renderSignalBars(payload);
-}
-
-async function loadExamples() {
-  const response = await fetch("/examples");
-  const examples = await response.json();
-  sampleGrid.innerHTML = "";
-  examples.forEach((example) => {
-    const article = document.createElement("article");
-    article.className = "sample-card";
-    article.innerHTML = `
-      <img src="${example.image_url}" alt="${example.label}">
-      <h3>${example.label}</h3>
-      <p>${example.description}</p>
+function renderCaseSelectors(cases) {
+  caseGrid.innerHTML = "";
+  cases.forEach((caseData, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "case-selector";
+    button.setAttribute("aria-pressed", "false");
+    button.innerHTML = `
+      <img src="${caseData.image_url}" alt="${caseData.title} public otoscopic reference image">
+      <span>${caseData.title}</span>
+      <small>Saved output</small>
     `;
-    article.addEventListener("click", async () => {
-      const imageResponse = await fetch(example.image_url);
-      const blob = await imageResponse.blob();
-      const file = new File([blob], `${example.case_id}.png`, { type: "image/png" });
-      await analyzeFile(file, example.label);
-    });
-    sampleGrid.appendChild(article);
+    button.addEventListener("click", () => selectCase(caseData, button));
+    caseGrid.appendChild(button);
+    if (index === 0) {
+      selectCase(caseData, button);
+    }
   });
 }
 
-uploadInput.addEventListener("change", async (event) => {
-  const [file] = event.target.files;
-  if (file) {
-    await analyzeFile(file);
+async function loadPublicCases() {
+  const response = await fetch("./public-cases.json");
+  if (!response.ok) {
+    throw new Error("Unable to load recorded public cases.");
   }
-});
+  const { cases } = await response.json();
+  renderCaseSelectors(cases);
+}
 
-loadExamples();
+loadPublicCases().catch((error) => {
+  caseGrid.textContent = error.message;
+});

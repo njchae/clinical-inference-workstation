@@ -35,31 +35,29 @@ demo keeps the method inspectable without publishing private evaluation results.
 
 Show:
 
-- the sample cards
-- the upload flow — any PNG can be run through the full pipeline live, so a demo is not
-  limited to the committed synthetic samples
-- the case view with the detected signal-region overlay
-- the decision summary panel
+- the three saved public-image cases
+- the field-of-view overlay generated during the recorded local pipeline run
+- the categorical saved-signal ledger
+- the human-review note that surfaces detector disagreement
 
 What this shows:
 
 The repo is not just a model dump. It includes an operator-facing review surface for
-interacting with inference results. In the private system, the equivalent was the thin
-internal tooling layer that sits on top of applied ML services.
+inspecting recorded inference artifacts without exposing the private pipeline or presenting
+a live clinical upload workflow.
 
-### 2. Click `Concerning pattern`
+### 2. Click `Reference frame 01`
 
 Show:
 
-- the case view overlay with the localized signal region
-- the signal breakdown bars with the decision-threshold tick
-- the populated decision summary
+- the saved field-of-view overlay
+- the categorical feature ledger
+- the explicit human-review requirement caused by detector disagreement
 
 What this shows:
 
-The triage recommendation is presented as a combination of deterministic signals plus
-calibrated model output — an inspectable workflow rather than a black-box prediction
-endpoint.
+The saved output is presented as a review artifact rather than a black-box prediction endpoint:
+it contains no probability, threshold, timing, diagnosis, treatment, or referral claim.
 
 ### 3. Show the API response artifact
 

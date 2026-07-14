@@ -7,11 +7,18 @@ triage workstation built to demonstrate evaluation discipline, hybrid feature en
 inference service design, and agentic label adjudication without exposing private code or
 clinical data.
 
-![Workstation running live inference on a synthetic case: detected signal region overlay, per-signal breakdown, calibrated probability against the decision threshold, and the triage decision](artifacts/latest/workstation-demo.png)
+![Workstation with saved local pipeline outputs on public otoscopic reference images](artifacts/latest/workstation-demo.png)
 
-*Live inference on deliberately abstract synthetic cases — no clinical imagery appears
-anywhere in this repo. See [`docs/portfolio-context.md`](docs/portfolio-context.md) for
-the public scope and provenance of the project.*
+*The workstation includes three saved local pipeline outputs on public otoscopic reference images adapted from Kemal Polat's
+[*eardrum.zip* dataset](https://doi.org/10.6084/m9.figshare.13648166.v1), licensed
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The public interface is a static,
+review-oriented artifact: it does not accept uploads or run inference. It is not a clinical
+assessment or diagnosis. Runnable model inputs and evaluation artifacts remain synthetic. See
+[`docs/reference-image-provenance.md`](docs/reference-image-provenance.md) and
+[`docs/portfolio-context.md`](docs/portfolio-context.md) for scope and provenance.*
+
+Private evaluation metrics and operational measurements are intentionally excluded. This
+saved-case bundle demonstrates review workflow and output traceability, not model performance.
 
 ## Key Results
 

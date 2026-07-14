@@ -13,7 +13,10 @@ aggregate model decision.
 
 The public code demonstrates those methods through a synthetic pathway: fixed train,
 validation, and held-out evaluation stages; calibration and threshold selection; auditable
-inference; and structured machine-assisted label adjudication.
+inference; and structured machine-assisted label adjudication. The workstation also displays
+three public otoscopic saved cases: categorical local-pipeline outputs on public imagery, rendered
+as static review fixtures. They are not routed through the synthetic inference service and do not
+represent clinical assessments or diagnoses.
 
 ## Engineering Patterns Represented
 

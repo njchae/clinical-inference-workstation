@@ -1,20 +1,19 @@
 const { test, expect } = require("@playwright/test");
 
-test("workstation should load sample cards and update the decision summary", async ({ page }) => {
+test("workstation should load recorded cases and update the review note", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: "Synthetic Triage Workstation" })).toBeVisible();
-  await expect(page.locator(".sample-card")).toHaveCount(3);
+  await expect(page.getByRole("heading", { name: "Inference Review Workstation" })).toBeVisible();
+  await expect(page.locator(".case-selector")).toHaveCount(3);
 
-  await page.locator(".sample-card").first().click();
-  await expect(page.locator("#decision-summary")).toContainText("based on combined visual signals");
-  await expect(page.locator("#signal-list")).toContainText("Redness ratio");
+  await page.locator(".case-selector").first().click();
+  await expect(page.locator("#review-note")).toContainText("Human review");
+  await expect(page.locator("#signal-list")).toContainText("Recorded signal");
 });
 
-test("workstation should analyze an uploaded sample image", async ({ page }) => {
+test("workstation should show the public-data and non-diagnostic scope", async ({ page }) => {
   await page.goto("/");
 
-  await page.locator("#upload-input").setInputFiles("web/samples/case-0042.png");
-  await expect(page.locator("#decision-summary")).toContainText("based on combined visual signals");
-  await expect(page.locator("#signal-list")).toContainText("Model probability");
+  await expect(page.locator(".case-provenance")).toContainText("CC BY 4.0");
+  await expect(page.locator("#review-note")).toContainText("not a clinical assessment");
 });

@@ -87,3 +87,28 @@ def test_public_portfolio_surface_should_not_publish_private_operational_metrics
         "kappa > 0.75",
     ):
         assert private_detail not in contents
+
+
+def test_public_reference_cases_should_include_attribution_and_saved_output_scope() -> None:
+    readme = Path("README.md").read_text(encoding="utf-8")
+    workstation = Path("web/index.html").read_text(encoding="utf-8")
+    app = Path("web/app.js").read_text(encoding="utf-8")
+    provenance = Path("docs/reference-image-provenance.md").read_text(encoding="utf-8")
+    case_data = Path("web/public-cases.json").read_text(encoding="utf-8")
+
+    assert Path("web/reference-images/otoscopic-reference-01.png").is_file()
+    assert Path("web/reference-images/otoscopic-reference-02.png").is_file()
+    assert Path("web/reference-images/otoscopic-reference-03.png").is_file()
+    assert "eardrum.zip" in readme
+    assert "CC BY 4.0" in readme
+    assert "Private evaluation metrics and operational measurements are intentionally excluded." in readme
+    assert "Recorded inference cases" in workstation
+    assert "public-cases.json" in app
+    assert "recorded local pipeline output" in workstation
+    assert "not a clinical assessment" in workstation
+    assert '"pipeline": "local_aom_feature_analysis"' in case_data
+    assert '"review_status": "human_review_required"' in case_data
+    assert "probability" not in case_data
+    assert "threshold" not in case_data
+    assert "latency" not in case_data
+    assert "10.6084/m9.figshare.13648166.v1" in provenance

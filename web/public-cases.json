@@ -1,0 +1,66 @@
+{
+  "bundle_version": "1.0",
+  "scope": "Recorded local pipeline outputs on licensed public reference images. These fixtures are illustrative only and are not clinical assessments.",
+  "cases": [
+    {
+      "case_id": "figshare-0124",
+      "title": "Reference frame 01",
+      "image_url": "./reference-images/otoscopic-reference-01.png",
+      "pipeline": "local_aom_feature_analysis",
+      "source": "Kemal Polat, eardrum.zip, Figshare",
+      "license": "CC BY 4.0",
+      "roi": { "x": 0.093, "y": 0.093, "width": 0.81, "height": 0.81 },
+      "signals": [
+        { "label": "Redness heuristic", "state": "recorded signal" },
+        { "label": "Yellow heuristic", "state": "recorded signal" },
+        { "label": "Cloudiness heuristic", "state": "recorded signal" },
+        { "label": "Perforation detector", "state": "recorded signal" },
+        { "label": "Bulging ML detector", "state": "not recorded" },
+        { "label": "Bulging heuristic", "state": "recorded signal" }
+      ],
+      "detector_disagreement": true,
+      "review_status": "human_review_required",
+      "review_note": "The two bulging detectors disagree. This frame is retained as a review example, not a conclusion."
+    },
+    {
+      "case_id": "figshare-0264",
+      "title": "Reference frame 02",
+      "image_url": "./reference-images/otoscopic-reference-02.png",
+      "pipeline": "local_aom_feature_analysis",
+      "source": "Kemal Polat, eardrum.zip, Figshare",
+      "license": "CC BY 4.0",
+      "roi": { "x": 0.093, "y": 0.093, "width": 0.81, "height": 0.81 },
+      "signals": [
+        { "label": "Redness heuristic", "state": "not recorded" },
+        { "label": "Yellow heuristic", "state": "not recorded" },
+        { "label": "Cloudiness heuristic", "state": "not recorded" },
+        { "label": "Perforation detector", "state": "not recorded" },
+        { "label": "Bulging ML detector", "state": "not recorded" },
+        { "label": "Bulging heuristic", "state": "recorded signal" }
+      ],
+      "detector_disagreement": true,
+      "review_status": "human_review_required",
+      "review_note": "The saved detector states are not unanimous. Human review remains required."
+    },
+    {
+      "case_id": "figshare-0245",
+      "title": "Reference frame 03",
+      "image_url": "./reference-images/otoscopic-reference-03.png",
+      "pipeline": "local_aom_feature_analysis",
+      "source": "Kemal Polat, eardrum.zip, Figshare",
+      "license": "CC BY 4.0",
+      "roi": { "x": 0.093, "y": 0.093, "width": 0.81, "height": 0.81 },
+      "signals": [
+        { "label": "Redness heuristic", "state": "not recorded" },
+        { "label": "Yellow heuristic", "state": "not recorded" },
+        { "label": "Cloudiness heuristic", "state": "recorded signal" },
+        { "label": "Perforation detector", "state": "not recorded" },
+        { "label": "Bulging ML detector", "state": "not recorded" },
+        { "label": "Bulging heuristic", "state": "recorded signal" }
+      ],
+      "detector_disagreement": true,
+      "review_status": "human_review_required",
+      "review_note": "A mixed signal set is shown as a review-oriented pipeline artifact, not a clinical interpretation."
+    }
+  ]
+}
